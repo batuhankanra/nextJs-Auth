@@ -38,6 +38,11 @@ const User:React.FC<SessionProps> =  ({session}) => {
               <h2>{session?.name} </h2>
             </div>
             <div ref={dropdownRef} className={`absolute top-10 rounded-md -right-16 bg-zinc-600 text-lg w-[200px] gap-y-3 p-2 z-10 text-start  ${act ? 'flex flex-col':'hidden'}`}>
+              {session.role==='ADMIN' && (
+                <div>
+                  <Link  href={'/admin'} className=' transition-all duration-200 hover:text-zinc-900 '>Admin menu</Link>
+                </div>
+              )}
               <Link  href={'/profile'} className=' transition-all duration-200 hover:text-zinc-900 '>Profile</Link>
               <button onClick={()=>handleLogout()} className='transition-all duration-200 hover:text-zinc-900 cursor-pointer text-start'>Cikis yap</button>
             </div>

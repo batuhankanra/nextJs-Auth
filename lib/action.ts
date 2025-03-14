@@ -33,6 +33,7 @@ export async function getUserCurrent() {
         if(!currentUser) return null
 
         return {
+            id:currentUser.id,
             name:currentUser.name,
             email:currentUser.email,
             role:currentUser.role,

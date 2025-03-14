@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Logo from './headercomp/Logo'
-import { menu } from '@/utils/menu';
+import { CategoryRotate } from '@/lib/enumCategory';
 import Link from 'next/link';
 import User from "./headercomp/User";
 import Basket from './headercomp/Basket';
@@ -18,7 +18,7 @@ const Header:React.FC = async  () => {
   return (
     <header className='sticky bg-black  border-b border-zinc-700 shadow-2xl  pt-5 p-2 '>
         <div className='flex items-center justify-between container mx-auto'>
-          <Logo classname='p-2'/>
+          <Logo link='/' classname='p-2'/>
           <div className='text-2xl flex items-center gap-x-8'>
             <Search />
             <Basket />
@@ -27,7 +27,7 @@ const Header:React.FC = async  () => {
         </div>
         <nav>
           <div className='mt-4 flex items-center justify-between container mx-auto'>
-            {menu && menu.map((item)=>(
+            { CategoryRotate.map((item)=>(
               <Link href={item.name} className='cursor-pointer p-2 text-lg hover:text-zinc-500  transition-all duration-200 capitalize font-semibold ' key={item.id}>
                 {item.name}
               </Link>
