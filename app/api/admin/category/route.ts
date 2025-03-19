@@ -1,17 +1,12 @@
+"use server"
+
 import { getUserCurrent } from '@/lib/action'
 import {prisma} from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 
 
 
-export async function GET(){
-    try{
-        const category =await prisma.category.findMany()
-        return NextResponse.json(category,{status:200})
-    }catch (err){
-        return NextResponse.json({msg:err},{status:500})
-    }
-}
+
 
 export async function POST(req:Request) {
     try{
@@ -20,23 +15,43 @@ export async function POST(req:Request) {
             return NextResponse.json({msg:'unauthorized access',user:session},{status:401})
         }
         const body=await req.json()
-        if(!body.name&& !body.parentId ){
+        if(!body.name){
             return NextResponse.json({msg:'invalid'})
         }
-        await prisma.category.create({
-            data:{
-                name:body.name,
-                parentId:body.parentId,
-                userId:session.id
-            }
+        const categories=await prisma.category.findMany()
+        
+        if(!body.parentId){
+            let newParentInt=(categories.filter(cat=>!cat.parentId?.includes('-')).length+1).toString()
+            
+            await prisma.category.create({
+                data:{
+                    name:body.name,
+                    parentId:newParentInt,
+                    userId:session.id
+                }
+            })
+            return NextResponse.json({msg:'Category created'},{status:200})
 
-        })
-        return NextResponse.json({msg:'Category created'},{status:200})
+        }else{
+            const categoriesT=categories.map(m=>m.parentId?.split('-')[0]).filter((m)=>m==body.parentId).length
+            const newCatParent=`${body.parentId}-${categoriesT}`
+            await prisma.category.create({
+                data:{
+                    name:body.name,
+                    parentId:newCatParent,
+                    userId:session.id
+                }
+    
+            })
+            return NextResponse.json({msg:'Category created'},{status:200})
+        }
+
+        
 
 
         
     }catch (err){
-        return NextResponse.json({msg:err},{status:500})
+        return NextResponse.json({msg:'server is broken'},{status:500})
     }
 }
 

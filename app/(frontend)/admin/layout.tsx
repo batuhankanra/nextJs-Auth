@@ -1,8 +1,7 @@
 
-import React from 'react'
 import AdminHeader from './adminComp/aheader'
 import ASideBar from './adminComp/aSideBar'
-import { getUserCurrent } from '@/lib/action'
+import { CategoryProvider } from './category/context/CategoryContext'
 
 const AdminLayout =  async ({children}: Readonly<{children: React.ReactNode}>)  => {  
   return (
@@ -11,7 +10,9 @@ const AdminLayout =  async ({children}: Readonly<{children: React.ReactNode}>)  
       <div className='flex flex-col w-full   '>
         <AdminHeader />
         <div className='mt-18 w-full  '>
+          <CategoryProvider>
           {children}
+          </CategoryProvider>
         </div>
       </div>
     </div>

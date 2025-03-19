@@ -6,7 +6,6 @@ import { FaUser } from 'react-icons/fa'
 
 const AdminHeader = async () => {
  const session=await getUserCurrent()
- console.log(session)
 
 
   return (
