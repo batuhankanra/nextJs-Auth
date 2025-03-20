@@ -5,6 +5,7 @@ import Link from 'next/link'
 
 import React from 'react'
 import { usecategory } from '../category/context/CategoryContext'
+import { useRouter } from 'next/navigation'
 
 export interface CategoryProps{
   id:string,
@@ -20,7 +21,8 @@ interface User{
 
 const CategoryInfo = () => {
   moment.locale('TR')
-  const {categories,infoCategory,removeCategory}=usecategory()
+  const router=useRouter()
+  const {categories,infoCategory}=usecategory()
   const [response,setResponse]=React.useState<CategoryProps[]>([])
 
     React.useEffect(()=>{
@@ -33,6 +35,10 @@ const CategoryInfo = () => {
 
       setResponse(existCategories)
 
+    }
+    const deleteCategories=async (id:string,parentId:string)=>{
+      await axios.delete(`http://localhost:3000/api/admin/category/delete`,{data:{id,parentId}}).then(()=>router.refresh())
+     
     }
   return (
     <div className=' flex items-center flex-col gap-y-10 '>
@@ -63,7 +69,7 @@ const CategoryInfo = () => {
               <td className='px-3 py-2 border text-center border-zinc-900'>{cat.user.name}</td>
               <td className='flex items-center gap-x-2 px-3 py-2'>
                 <Link href={`/admin/category/${cat.id}`} className='cursor-pointer bg-indigo-700 rounded-md p-2'>Edit</Link>
-                <button onClick={()=>removeCategory(cat.id)} className='cursor-pointer bg-red-700 rounded-md p-2'>delete</button>
+                <button onClick={()=>deleteCategories(cat.id,cat.parentId)} className='cursor-pointer bg-red-700 rounded-md p-2'>delete</button>
                 <button className='cursor-pointer bg-green-700 rounded-md p-2' onClick={()=>hadleButton(cat)}>Down</button>
               </td>
             </tr>
@@ -95,7 +101,7 @@ const CategoryInfo = () => {
               <td className='px-3 py-2 border text-center border-zinc-900'>{cat.user.name}</td>
               <td className='flex items-center gap-x-2 px-3 py-2'>
                 <Link href={`/admin/category/${cat.id}`} className='cursor-pointer bg-indigo-700 rounded-md p-2'>Edit</Link>
-                <button onClick={()=>removeCategory(cat.id)} className='cursor-pointer bg-red-700 rounded-md p-2'>delete</button>
+                <button onClick={()=>deleteCategories(cat.id,cat.parentId)} className='cursor-pointer bg-red-700 rounded-md p-2'>delete</button>
               </td>
             </tr>
           ))}

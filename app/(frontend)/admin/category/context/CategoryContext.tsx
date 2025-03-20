@@ -11,7 +11,6 @@ interface CategoryContextType{
     oneGet:(id:string)=>void
     infoCategory:()=>void
     addCategory:(category:CategoryProps)=>void
-    removeCategory:(id:string)=>void
 }
 
 const CategoryContext=React.createContext<CategoryContextType | undefined | null>(undefined)
@@ -38,17 +37,10 @@ export const CategoryProvider = ({children}:{children:React.ReactNode}) => {
         
         setCategories(response.data)
     }
-    const removeCategory=async (id:string)=>{
-      const response =await axios.delete(`http://localhost:3000/api/admin/category/delete`,{data:{id}})
-      if(response.status===200){
-        router.refresh()
-        router.push('/admin/category')
-      }
 
-    }
 
   return (
-    <CategoryContext.Provider value={{categories,addCategory,removeCategory,infoCategory,oneGet}}>
+    <CategoryContext.Provider value={{categories,addCategory,infoCategory,oneGet}}>
       {children}
     </CategoryContext.Provider>
   )
